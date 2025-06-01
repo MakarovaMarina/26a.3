@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"sync"
@@ -80,7 +80,7 @@ func (rb *RingBuffer) FlushChan() <-chan []int {
 
 func dataSource(out chan<- int) {
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Println("Введите целые числа. Для выхода введите 'exit':")
+	log.Println("Введите целые числа. Для выхода введите 'exit':")
 	for scanner.Scan() {
 		input := scanner.Text()
 		if input == "exit" {
@@ -90,7 +90,7 @@ func dataSource(out chan<- int) {
 		if num, err := strconv.Atoi(input); err == nil {
 			out <- num
 		} else {
-			fmt.Println("Некорректное значение. Введите целое число.")
+			log.Println("Некорректное значение. Введите целое число.")
 		}
 	}
 }
@@ -123,7 +123,7 @@ func bufferStage(in <-chan int, rb *RingBuffer) {
 func dataConsumer(in <-chan []int) {
 	for batch := range in {
 		for _, data := range batch {
-			fmt.Printf("Получены данные: %d\n", data)
+			log.Printf("Получены данные: %d\n", data)
 		}
 	}
 }
